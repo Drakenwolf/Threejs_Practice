@@ -14,8 +14,32 @@ const scene = new THREE.Scene();
 /**
  * Object
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+// const geometry = new THREE.BoxGeometry(1, 1, 1, 3, 3, 3);
+
+const geometry = new THREE.Geometry();
+
+for (let i = 0; i < 50; i++) {
+  for (let j = 0; j < 3; j++) {
+    geometry.vertices.push(
+      new THREE.Vector3(
+        (Math.random() - 0.5) * 4,
+        (Math.random() - 0.5) * 4,
+        (Math.random() - 0.5) * 4
+      )
+    );
+  }
+  const verticesIndex = i * 3;
+  geometry.faces.push(
+    new THREE.Face3(verticesIndex + 0, verticesIndex + 1, verticesIndex + 2)
+  );
+}
+
+const face = new THREE.Face3(0, 1, 2);
+geometry.faces.push(face);
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  wireframe: true,
+});
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
@@ -85,6 +109,11 @@ controls.enableDamping = true;
 /**
  * Renderer
  */
+
+//axes helper
+const axesHelper = new THREE.AxesHelper(3);
+scene.add(axesHelper);
+
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
 });
