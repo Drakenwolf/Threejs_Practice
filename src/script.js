@@ -1,7 +1,23 @@
 import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import gsap from "gsap";
+import * as dat from "dat.gui";
 
+//debug
+
+const gui = new dat.GUI();
+const debugObject = {
+  color: "#6B5B95",
+  spin: () => {
+    gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 });
+  },
+};
+gui.addColor(debugObject, "color").onChange(() => {
+  material.color.set(debugObject.color);
+});
+
+gui.add(debugObject, "spin").name("rotate in y");
 /**
  * Base
  */
@@ -16,76 +32,21 @@ const scene = new THREE.Scene();
  */
 //
 
-// const geometry = new THREE.Geometry();
+const geometry = new THREE.BoxBufferGeometry(1, 1, 1, 3, 3, 3);
 
-// for (let i = 0; i < 50; i++) {
-//   for (let j = 0; j < 3; j++) {
-//     geometry.vertices.push(
-//       new THREE.Vector3(
-//         (Math.random() - 0.5) * 4,
-//         (Math.random() - 0.5) * 4,
-//         (Math.random() - 0.5) * 4
-//       )
-//     );
-//   }
-//   const verticesIndex = i * 3;
-//   geometry.faces.push(
-//     new THREE.Face3(verticesIndex + 0, verticesIndex + 1, verticesIndex + 2)
-//   );
-// }
-// const face = new THREE.Face3(0, 1, 2);
-// geometry.faces.push(face);
-
-// const geometry = new THREE.BoxBufferGeometry(1, 1, 1, 3, 3, 3);
-
-// creatting things like a custon buffer geometry
-// using FloatArray32
-
-//is a typed array
-//can only storage floats
-//fixed length
-//better performance, no dev friendly
-
-// const positionArray = new Float32Array(9);
-
-// positionArray[0] = 0;  //X
-// positionArray[1] = 1;  //Y
-// positionArray[2] = 2;  //Z
-// //
-// positionArray[3] = 3;
-// positionArray[4] = 4;
-// positionArray[5] = 5;
-// //
-// positionArray[6] = 6;
-// positionArray[7] = 7;
-// positionArray[8] = 8;
-
-// const positionsArray = new Float32Array([
-//   0, 0, 0,
-//   0, 1, 0,
-//   1, 0, 0
-// ]);
-
-// const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-
-// const geometry = new THREE.BufferGeometry();
-// geometry.setAttribute("position", positionsAttribute);
-
-const geometry = new THREE.BufferGeometry();
-const count = 500;
-const positionsArray = new Float32Array(count * 3 * 3);
-
-for (let i = 0; i < count * 3 * 3; i++) {
-  positionsArray[i] = (Math.random() - 0.5) * 4;
-}
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-geometry.setAttribute("position", positionsAttribute);
 const material = new THREE.MeshBasicMaterial({
-  color: 0xff0000,
-  wireframe: true,
+  color: debugObject.color,
 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
+
+//debug
+gui.add(mesh.position, "x").min(-3).max(3).step(0.01).name("left/right");
+gui.add(mesh.position, "y", -3, 3, 0.01).name("elevation");
+gui.add(mesh.position, "z", -3, 3, 0.01).name("profundity");
+
+gui.add(mesh, "visible").name("cube displayed");
+gui.add(material, "wireframe");
 
 /**
  * Sizes
