@@ -3,7 +3,45 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import gsap from "gsap";
 import * as dat from "dat.gui";
-import imageSource from './img.png'
+import { LoadingManager } from "three";
+
+///textures
+const loadingManager = new THREE.LoadingManager();
+
+// loadingManager.onStart = () => {
+//   console.log("onStart");
+// };
+// loadingManager.onLoaded = () => {
+//   console.log("on loaded");
+// };
+// loadingManager.onProgress = () => {
+//   console.log("onProgress");
+// };
+// loadingManager.onError = () => {
+//   console.log("onError ");
+// };
+
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const colorTexture = textureLoader.load("textures/door/color.jpg");
+const alphaTexture = textureLoader.load("textures/door/alpha.jpg");
+const heightTexture = textureLoader.load("textures/door/height.jpg");
+const normalTexture = textureLoader.load("textures/door/normal.jpg");
+const ambientOcclusionTexture = textureLoader.load(
+  "textures/door/ambientOcclusion.jpg"
+);
+const metalnessTexture = textureLoader.load("textures/door/metalness.jpg");
+const roughnessTexture = textureLoader.load("textures/door/roughness.jpg");
+
+// colorTexture.repeat.x = 2;
+// colorTexture.repeat.x = 3;
+// colorTexture.wrapS = THREE.MirrorReapeatWrapping;
+// colorTexture.wrapT = THREE.MirrorReapeatWrapping;
+
+// colorTexture.offset.x = 0.5;
+// colorTexture.offset.y = 0.5;
+// colorTexture.center.x = 0.5;
+// colorTexture.center.y = 0.5;
+// colorTexture.rotation = Math.PI / 4;
 //debug
 
 const gui = new dat.GUI();
@@ -34,9 +72,7 @@ const scene = new THREE.Scene();
 
 const geometry = new THREE.BoxBufferGeometry(1, 1, 1, 3, 3, 3);
 
-const material = new THREE.MeshBasicMaterial({
-  color: debugObject.color,
-});
+const material = new THREE.MeshBasicMaterial({ map: colorTexture });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
